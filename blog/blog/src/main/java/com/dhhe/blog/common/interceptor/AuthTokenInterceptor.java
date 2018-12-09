@@ -4,6 +4,7 @@ import com.dhhe.blog.common.config.Config;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
 
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -17,8 +18,9 @@ public class AuthTokenInterceptor implements HandlerInterceptor {
         HttpSession session = request.getSession();
         Object user = session.getAttribute("currentUser");
         if (user == null) {
+            response.setHeader("redirect", request.getRequestURL().toString());
             response.sendRedirect(Config.loginPage);
-            return true;
+            return false;
         }
         return true;
     }
